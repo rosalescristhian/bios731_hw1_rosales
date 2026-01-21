@@ -19,20 +19,20 @@ The project is organized into modular scripts to ensure reproducibility.
 
 ### Folders
 * **`source/`**: Contains all R scripts for the workflow.
-* **`data/`**: Stores intermediate and processed data files (`clean_data.Rdata`).
-* **`results/`**: Stores model outputs, summary statistics tables (`summary_stats.csv`), and saved model objects.
+* **`data/`**: Stores raw and processed data files.
+* **`results/`**: Stores model outputs, summary statistics tables, and saved model objects.
 
 ### Scripts (`source/`)
-* **`01_data_download.R`**: Downloads raw data from FRED using `tidyquant` and saves it to `data/raw_data.RData`.
+* **`01_data_download.R`**: Downloads raw data from FRED and saves it to `data/raw_data.RData`.
 * **`02_data_cleaning.R`**:
     * Aligns monthly interest rates to quarterly frequency (taking the mean).
     * Transforms GDP and Prices into Annualized Growth Rates.
 * **`03_data_analysis.R`**:
     * Computes descriptive statistics.
     * Selects optimal lags using the Schwarz Criterion (SC).
-    * Estimates the VAR model using the `vars` package.
+    * Estimates the VAR model.
     * Calculates Orthogonalized Impulse Response Functions (IRF).
-* **`04_data_visualization.R`**: Generates `ggplot2` visualizations for the time series history and IRF results.
+* **`04_data_visualization.R`**: Generatesm visualizations for the time series history and IRF results.
 
 ## 3. Session Info
 

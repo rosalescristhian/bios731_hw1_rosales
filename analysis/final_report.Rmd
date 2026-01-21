@@ -1,0 +1,121 @@
+---
+title: "Macroeconomic Analysis of US Monetary Policy"
+author: "Cristhian Rosales-Castillo"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+params:
+  download_raw_data: FALSE
+hitheme: tomorrow
+highlighter: highlight.js
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(here)
+library(knitr)
+library(vars)
+
+knitr::opts_chunk$set(echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 9,
+  fig.height = 6,
+  fig.path = "../results/"
+)
+
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+```
+
+## Overview
+
+This report provides a simple analysis of the dynamic relationship between the Federal Funds Rate, Real GDP Growth, and Inflation in the United States. It utilizes a Vector Autoregression (VAR) framework to estimate Impulse Response Functions (IRFs).
+
+**Research Question**: How do shocks to the Federal Funds Rate (Monetary Policy) impact US GDP Growth and Inflation?
+
+### Download data
+
+We source data directly from the Federal Reserve Bank of St. Louis (FRED).
+
+-**GDPC1**: Real Gross Domestic Product (Quarterly)
+
+-**GDPDEF**: GDP Implicit Price Deflator (Quarterly)
+
+-**FEDFUNDS**: Federal Funds Effective Rate (Monthly)
+
+```{r}
+
+if(!file.exists(here("source", "raw_data.RData"))) {
+  source(here("source", "01_data_download.R"))
+
+  } else {
+    load(here("source", "raw_data.RData"))
+}
+
+```
+
+## Clean data
+
+The cleaning process involves:
+
+1. **Frequency Alignment**: Aggregating monthly interest rates to quarterly averages.
+2. **Transformation**: Log-transforming GDP and Prices, then differencing to calculate Annualized Growth Rates ($400 \times \Delta \ln X_t$).
+
+```{r}
+source(here("source", "02_data_cleaning.R"))
+```
+
+## Analyze data
+We estimate a VAR model. Lag selection is determined by the Schwarz Criterion (SC) to ensure a parsimonious model.
+
+```{r}
+source(here("source", "03_data_analysis.R"))
+```
+
+## Summary Statistics
+
+```{r}
+summary_stats %>%
+  kable(digits = 2, caption = "Descriptive Statistics of Macroeconomic Variables")
+```
+
+## Visualize data
+
+```{r}
+source(here("source", "04_data_visualization.R"))
+```
+
+### Historical Evolution
+
+```{r}
+p1
+```
+
+**Observation**: As seen in Figure 1, the dataset includes the 2020 COVID-19 shock, where GDP growth swung from approx -30% to +30% (annualized). This extreme outlier introduces significant variance into the model estimation.
+
+### Impulse Response Functions
+The following plots show the orthogonalized response of GDP Growth and Inflation to a one-standard-deviation shock in the Federal Funds Rate.
+
+```{r}
+p2
+```
+
+### Findings & Conclusion
+Based on the Impulse Response Functions in Figure 2:
+
+1. **GDP Response (Top Panel)**:
+
+A monetary tightening (rate hike) leads to a decline in GDP growth, which is consistent with standard macroeconomic theory.
+
+However, the confidence intervals are wide and include zero, making the result statistically insignificant. This high uncertainty is likely driven by the extreme volatility of the 2020 period included in the sample.
+
+2. **Inflation Response (Bottom Panel)**:
+
+We observe a "Price Puzzle": Inflation initially rises following a rate hike before flattening out.
+
+This is a common finding in basic 3-variable VARs. It often implies the model is missing forward-looking variables (like commodity prices) that the Fed uses to forecast inflation.
+
+**Conclusion**: While the model captures the contractionary direction of GDP, the presence of the Price Puzzle suggests that a more complex specification (e.g., adding commodity prices or using a structural identification strategy) would be required for a precise causal analysis.

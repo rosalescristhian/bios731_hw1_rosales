@@ -1,3 +1,7 @@
+library(timetk)
+library(lubridate)
+library(tidyverse)
+
 # load raw data
 load(here::here("data", "raw.Rdata"))
 

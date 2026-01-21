@@ -90,7 +90,7 @@ source(here("source", "04_data_visualization.R"))
 
 ### Historical Evolution
 
-```{r}
+```{r, ts_plot}
 p1
 ```
 
@@ -99,7 +99,7 @@ p1
 ### Impulse Response Functions
 The following plots show the orthogonalized response of GDP Growth and Inflation to a one-standard-deviation shock in the Federal Funds Rate.
 
-```{r}
+```{r, irf_plot}
 p2
 ```
 

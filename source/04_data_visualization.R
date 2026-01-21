@@ -15,8 +15,6 @@ p1 <- ggplot(final_ts_data, aes(x = date)) +
        y = "Percent (Annualized)", x = "", color = NULL) +
   scale_color_manual(values = c("blue", "red", "black"))
 
-ggsave(here::here("results", "ts_plot.png"), plot = p1, width = 8, height = 5)
-
 # 2. Impulse Response Plot
 # Helper function to extract IRF data
 extract_irf <- function(irf_obj, response_var) {
@@ -39,5 +37,3 @@ p2 <- ggplot(plot_data, aes(x = period, y = est)) +
   theme_minimal() +
   labs(title = "Response to 1% Shock in Fed Funds Rate",
        y = "Response", x = "Quarters after Shock")
-
-ggsave(here::here("results", "irf_plot.png"), plot = p2, width = 6, height = 6)
